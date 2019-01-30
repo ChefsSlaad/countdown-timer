@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>countdown</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/control.css">
+</head>
+
+<body>
+  <script  src="js/index.js"></script>
+  <div id="control">
+    <form id="control-form">
+
+      <div id="control-play">
+        <label>
+        <input type="radio" onchange="updateControl(this.value);" name="control" id="run" value="run" checked>
+          <i id="play-icon" class='fas fa-play'></i></label></div>
+
+      <div id="control-pause">
+        <label>
+        <input type="radio" onchange="updateControl(this.value);" name="control" id="pause" value="pause">
+        <i id="pause-icon" class='fas fa-pause'></i></label></div>
+
+      <div id="control-reload">
+        <label>
+        <input type="radio" onchange="updateControl(this.value);" name="control" id="reset" value="reload">
+          <i id="reload-icon" class='fas fa-undo'></i></label></div>
+
+    </form>
+</body>
+</html>
