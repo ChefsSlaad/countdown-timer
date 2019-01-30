@@ -6,19 +6,22 @@ var red_zone = 30 *1000; //ms the screen should flash red if the time is about t
 
 
 function updateControl(ctl) {
+//  get_http_data(window.location.origin + '/control=' + ctl)
   run_state = ctl;
 }
 
 function get_http_data(url) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-     updateControl(this.responseText);
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.send();
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", url, true);
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200 &&  typeof target != 'undefined') {
+            console.log(xhttp.responseText);
+            updateControl(xhttp.responseText);
+          };
+        };
+    xhttp.send();
 }
+
 
 function CountdownTracker(label, value){
 // this function creates a minute / second flipclock element as well as
@@ -117,18 +120,18 @@ async function runmany(c) {
     switch (run_state) {
       case "run":
         c.updateClock();
-        document.getElementById("run").checked = true
-        break
+        document.getElementById("run").checked = true;
+        break;
       case "pause":
-        document.getElementById("pause").checked = true
-        break
+        document.getElementById("pause").checked = true;
+        break;
       case "reload":
         c.updateClock(countdownTime);
-        document.getElementById("run").checked = true // after reset immediately start running
-        run_state = "run"
-        break
+        document.getElementById("run").checked = true; // after reset immediately start running
+        run_state = "run";
+        break;
       }
-    get_http_data(window.location.origin + '/run_state', )
+    get_http_data(window.location.origin + '/run_state', );
     await sleep(1000);
     }
 }
