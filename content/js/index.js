@@ -7,6 +7,7 @@ var red_zone = 30 *1000; //ms the screen should flash red if the time is about t
 
 function updateControl(ctl) {
 //  get_http_data(window.location.origin + '/control=' + ctl)
+  console.log(ctl)
   run_state = ctl;
 }
 
@@ -14,7 +15,7 @@ function get_http_data(url) {
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", url, true);
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200 &&  typeof target != 'undefined') {
+        if (xhttp.readyState == 4 && xhttp.status == 200 ) {
             console.log(xhttp.responseText);
             updateControl(xhttp.responseText);
           };
