@@ -15,9 +15,10 @@ input[type="radio"] {
 input[type="radio"]:checked ~ i {
   color: #f00;
 }
-
-@media only screen and (max-width: 600px) {
+/*
+ @media only screen and (max-width: 600px) {
   .button {
       display: block;
   }
 }
+*/
