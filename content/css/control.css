@@ -4,8 +4,8 @@
 }
 
 #control i {
-  font-size: 20vmin;
-  margin: 5vmin;
+  font-size: 15vmin;
+  margin: 3vmin;
 }
 
 input[type="radio"] {
@@ -15,10 +15,9 @@ input[type="radio"] {
 input[type="radio"]:checked ~ i {
   color: #f00;
 }
-/*
- @media only screen and (max-width: 600px) {
+
+ @media only screen and (max-width: 1080px) {
   .button {
       display: block;
   }
 }
-*/
