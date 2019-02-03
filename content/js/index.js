@@ -6,7 +6,7 @@ var red_zone = 30 *1000; //ms the screen should flash red if the time is about t
 
 
 function updateControl(ctl) {
-//  get_http_data(window.location.origin + '/control=' + ctl)
+  get_run_state(window.location.origin + '/control=' + ctl);
 //  console.log(ctl)
   run_state = ctl;
 }
@@ -17,7 +17,7 @@ function get_run_state(url) {
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200 ) {
 //            console.log(xhttp.responseText);
-            updateControl(xhttp.responseText);
+            run_state = xhttp.responseText;
           };
         };
     xhttp.send();
@@ -117,6 +117,7 @@ function sleep(ms) {
 
 async function runmany(c) {
   await sleep(1000);
+  var update_ready = true;
   while (true) {
     switch (run_state) {
       case "run":
@@ -132,7 +133,7 @@ async function runmany(c) {
 //        run_state = "run";
         break;
       }
-    get_http_data(window.location.origin + '/run_state', );
+    get_run_state(window.location.origin + '/run_state', );
     await sleep(1000);
     }
 }

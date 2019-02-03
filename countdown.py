@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from bottle import route, run, static_file
+from time import sleep
 
 run_state = "run"
 valid_states = ("run", "pause","reload")
@@ -16,6 +17,10 @@ def command(command):
     if command.lower() in valid_states:
         global run_state
         run_state = command.lower()
+        if run_state == "reload":
+            sleep(1)
+            run_state = "pause"
+        
 
 @route('/<filename:re:.*\.(html|css|js)$>')
 def static_file_return(filename):
