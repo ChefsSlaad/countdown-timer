@@ -20,7 +20,7 @@ def command(command):
         if run_state == "reload":
             sleep(1)
             run_state = "pause"
-        
+
 
 @route('/<filename:re:.*\.(html|css|js)$>')
 def static_file_return(filename):
