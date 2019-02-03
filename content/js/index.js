@@ -98,6 +98,7 @@ function Clock(countdown,red_zone,callback) {
       for ( key in trackers ){
         trackers[key].update( 0 );
       }
+      document.body.classList.remove("red_allert");
       callback();
       return;
     }
