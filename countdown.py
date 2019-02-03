@@ -17,9 +17,7 @@ def command(command):
     if command.lower() in valid_states:
         global run_state
         run_state = command.lower()
-        if run_state == "reload":
-            sleep(2)
-            run_state = "pause"
+
 
 
 @route('/<filename:re:.*\.(html|css|js)$>')
