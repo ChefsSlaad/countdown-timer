@@ -98,12 +98,11 @@ function Clock(countdown,red_zone,callback) {
       for ( key in trackers ){
         trackers[key].update( 0 );
       }
-      document.body.classList.remove("red_allert");
       callback();
       return;
     }
     else if (t.Total <= red_zone) {
-      if ( ( t.Total/1000 ) % 2 == 0 ) {document.body.classList.add("red_allert")}
+      if ( ( t.Total/1000 ) % 2 == 1 ) {document.body.classList.add("red_allert")} //turn red on unevent seconds past red_allert tiem
       else {document.body.classList.remove("red_allert")};
     }
     for ( key in trackers ){
@@ -130,6 +129,7 @@ async function runmany(c) {
         break;
       case "reload":
         c.updateClock(countdownTime);
+        document.body.classList.remove("red_allert");
         document.getElementById("reload").checked = true; // after reset immediately start running
 //        run_state = "run";
         break;
