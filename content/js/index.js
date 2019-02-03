@@ -1,8 +1,9 @@
 console.clear();
 
+var valid_run_states = ["run", "pause", "reload"];
 var run_state = "run";// options should be run, reset or pause
-var countdownTime = 300 * 1000;// mseconds the countdown should take
-var red_zone = 30 *1000; //ms the screen should flash red if the time is about to elapse
+var countdownTime = 300;// mseconds the countdown should take
+var red_zone = 30; //ms the screen should flash red if the time is about to elapse
 
 
 function updateControl(ctl) {
@@ -11,18 +12,35 @@ function updateControl(ctl) {
   run_state = ctl;
 }
 
+
+
 function get_run_state(url) {
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", url, true);
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200 ) {
 //            console.log(xhttp.responseText);
-            run_state = xhttp.responseText;
+          update_run_state(xhttp.responseText)
           };
         };
     xhttp.send();
 }
 
+function update_run_state(text) {
+  response = text.split('&');
+  var i
+  for (i = 0; i < response.length; i++)  {
+    resp = response[i];
+    if (valid_run_states.includes(resp)) {
+      run_state = resp;
+    } else {
+      t = parseInt(resp);
+      if (!isNaN(t)) {
+        countdownTime = t
+      }
+    }
+  }
+}
 
 function CountdownTracker(label, value){
 // this function creates a minute / second flipclock element as well as
@@ -68,8 +86,8 @@ function getTimeRemaining(endtime) {
   var t = endtime;
   return {
     'Total': t,
-    'Minutes': Math.floor((t / 1000 / 60) % 60),
-    'Seconds': Math.floor((t / 1000) % 60)
+    'Minutes': Math.floor((t /  60) % 60),
+    'Seconds': Math.floor((t / 1 ) % 60)
   };
 }
 
@@ -91,7 +109,7 @@ function Clock(countdown,red_zone,callback) {
   }
 
   this.updateClock = function(new_countdown) {
-    countdown -= 1000
+    countdown -= 1
     countdown = new_countdown ? new_countdown : countdown;
     var t = getTimeRemaining(countdown);
     if ( t.Total < 0 ) {
@@ -102,7 +120,7 @@ function Clock(countdown,red_zone,callback) {
       return;
     }
     else if (t.Total <= red_zone) {
-      if ( ( t.Total/1000 ) % 2 == 1 ) {document.body.classList.add("red_allert")} //turn red on unevent seconds past red_allert tiem
+      if ( ( t.Total ) % 2 == 1 ) {document.body.classList.add("red_allert")} //turn red on unevent seconds past red_allert tiem
       else {document.body.classList.remove("red_allert")};
     }
     for ( key in trackers ){
