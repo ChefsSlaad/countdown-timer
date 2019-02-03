@@ -18,7 +18,7 @@ def command(command):
         global run_state
         run_state = command.lower()
         if run_state == "reload":
-            sleep(1)
+            sleep(2)
             run_state = "pause"
 
 
