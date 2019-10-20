@@ -12,11 +12,8 @@ The device includes the following components:
         * connect to wifi network
 
 
-
-
 to-do's:
 * duration should be adjustable thorugh the control page
-* script to configure / set-up the device.
 * method to adjust the configuration of the access-point (e.g. atach to another aqccess point, change ssid and password)
 * easy device naming... use alias when device is set as access-point
 
