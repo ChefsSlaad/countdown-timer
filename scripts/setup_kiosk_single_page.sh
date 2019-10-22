@@ -154,9 +154,6 @@ xset -dpms
 
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromium/Default/Preferences
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
-
-
-
 EOF
 
 
@@ -164,7 +161,7 @@ EOF
 # check if URLS has 2 or more values. If so add a tab shifting function
 
 spaces=" |'"
-if [[ "$string" =~ $spaces ]]
+if [[ "$URLS" =~ $spaces ]]
     then cat >> ~kiosk/kiosk.sh <<EOF
          while true; do
              xdotool keydown ctrl+Tab; xdotool keyup ctrl+Tab;
@@ -186,3 +183,32 @@ sed -i '/^@xscreensaver -no-splash/c\#@xscreensaver -no-splash' /etc/xdg/lxsessi
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 @bash unclutter -idle 0.5 -root &
 EOF
+
+# set a unit file
+
+cat >> /etc/systemd/system/pi@kiosk.service <<EOF
+[Unit]
+Description=Chromium Dashboard
+Requires=graphical.target
+After=graphical.target
+
+[Service]
+Environment=DISPLAY=:0.0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+ExecStartPre=/home/pi/kiosk/kiosk.sh
+ExecStart=usr/bin/chromium-browser --noerrdialogs --disable-infobars --kiosk $URLS
+Restart=on-abort
+User=pi
+Group=pi
+
+[Install]
+WantedBy=graphical.target
+EOF
+
+systemctl enable pi@kiosk.service
+systemctl daemon-reload
+
+echo 'configuration done. to start enter'
+echo 'sudo systemctl start pi@kiosk.service'
+
+
