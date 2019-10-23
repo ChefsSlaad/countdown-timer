@@ -14,7 +14,9 @@ The device includes the following components:
 to install simply download this repo and run the install script. This will guide you through the setup  
 
 > git clone https://github.com/marcwagner/countdown-timer.git
+
 > cd countdown timer
+
 > sudo install.sh
 
 
