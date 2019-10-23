@@ -13,16 +13,12 @@ The device includes the following components:
 
 to install simply download this repo and run the install script. This will guide you through the setup  
 
-'''bash
-git clone https://github.com/marcwagner/countdown-timer.git
-cd countdown timer
-sudo install.sh
-'''
-
+> git clone https://github.com/marcwagner/countdown-timer.git
+> cd countdown timer
+> sudo install.sh
 
 
 to-do's:
 * duration should be adjustable thorugh the control page
 * method to adjust the configuration of the access-point (e.g. atach to another aqccess point, change ssid and password)
 * easy device naming... use alias when device is set as access-point
-
