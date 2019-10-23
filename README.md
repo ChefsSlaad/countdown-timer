@@ -11,17 +11,22 @@ The device includes the following components:
         * allow the pi to enter kiosk mode at startup
         * connect to wifi network
 
+this is an example of the output
+![sample output](content/countdown.gif)
+
+
+### Install
 to install simply download this repo and run the install script. This will guide you through the setup  
 
-'''
+```
 git clone https://github.com/marcwagner/countdown-timer.git
-
 cd countdown timer
-
 sudo install.sh
-'''
+```
 
-to-do's:
+
+
+### to-do's:
 * duration should be adjustable thorugh the control page
 * method to adjust the configuration of the access-point (e.g. atach to another aqccess point, change ssid and password)
 * easy device naming... use alias when device is set as access-point
