@@ -11,6 +11,15 @@ The device includes the following components:
         * allow the pi to enter kiosk mode at startup
         * connect to wifi network
 
+to install simply download this repo and run the install script. This will guide you through the setup  
+
+'''bash
+git clone https://github.com/marcwagner/countdown-timer.git
+cd countdown timer
+sudo install.sh
+'''
+
+
 
 to-do's:
 * duration should be adjustable thorugh the control page
