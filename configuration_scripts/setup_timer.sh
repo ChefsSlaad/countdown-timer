@@ -9,7 +9,7 @@
 
 
 INSTALL_DIR=$PWD
-TIMER_FILE="INSTALL_DIR/countdown_timer/countdown.py"
+TIMER_FILE="$INSTALL_DIR/countdown_timer/countdown.py"
 
 #################################
 # usage message                 #
@@ -52,18 +52,22 @@ git clone git@github.com:marcwagner/countdown-timer.git
 #################################
 cat > /etc/systemd/system/countdown.service <<EOF
 [Unit]
-Description=countdown timer
-After=multi-user.target
+Description=start webserver displaying countdown info
+After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 $TIMER_FILE
+WorkingDirectory=$INSTALL_DIR/countdown_timer/
+ExecStart=$TIMER_FILE
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 systemctl enable countdown.service
+systemctl daemon-reload
 systemctl start countdown.service
 
 

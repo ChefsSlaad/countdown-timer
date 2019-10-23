@@ -89,7 +89,7 @@ while [ "$1" != "" ]; do
 done
 
 if [[ -z $URLS ]]
-    then URLS="http://127.0.0.1"
+    then URLS="http://localhost"
 fi
 parameters
 
@@ -112,8 +112,6 @@ cat >> /boot/config.txt <<EOF
 display_rotate=$ROTATE
 avoid_warnings=1
 EOF
-
-
 
 #####################################
 # set desktop bgcolor and screen    #
@@ -145,6 +143,13 @@ sed -i '/show_mounts/c\show_mounts=0' $pcmanfm_conf
 
 mkdir -p /home/pi/kiosk/
 
+# disable screensaver and hide mouse
+sed -i '/^@xscreensaver -no-splash/c\#@xscreensaver -no-splash' /etc/xdg/lxsession/LXDE-pi/autostart
+cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+@bash unclutter -idle 0.5 -root &
+EOF
+
+# ensure chromium starts cleanly every time
 cat > /home/pi/kiosk/kiosk.sh <<EOF
 #!/bin/bash
 
@@ -156,35 +161,12 @@ sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromi
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
 EOF
 
-
-
-# check if URLS has 2 or more values. If so add a tab shifting function
-
-spaces=" |'"
-if [[ "$URLS" =~ $spaces ]]
-    then cat >> ~kiosk/kiosk.sh <<EOF
-         while true; do
-             xdotool keydown ctrl+Tab; xdotool keyup ctrl+Tab;
-             sleep 15
-         done
+cat >> ~kiosk/kiosk-tab-shift.sh <<EOF
+while true; do
+    xdotool keydown ctrl+Tab; xdotool keyup ctrl+Tab;
+    sleep 15
+done
 EOF
-fi
-
-# finally, set permissions and execution bits on the script
-chmod +x /home/pi/kiosk/kiosk.sh
-chown pi:pi /home/pi/kiosk/kiosk.sh
-
-#####################################
-#       autostart an boot           # 
-#####################################
-
-# disable screensaver and hide mouse
-sed -i '/^@xscreensaver -no-splash/c\#@xscreensaver -no-splash' /etc/xdg/lxsession/LXDE-pi/autostart
-cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
-@bash unclutter -idle 0.5 -root &
-EOF
-
-# set a unit file
 
 cat >> /etc/systemd/system/pi@kiosk.service <<EOF
 [Unit]
@@ -196,7 +178,7 @@ After=graphical.target
 Environment=DISPLAY=:0.0
 Environment=XAUTHORITY=/home/pi/.Xauthority
 ExecStartPre=/home/pi/kiosk/kiosk.sh
-ExecStart=usr/bin/chromium-browser --noerrdialogs --disable-infobars --kiosk $URLS
+ExecStart=/usr/bin/chromium-browser --noerrdialogs --disable-infobars --kiosk $URLS
 Restart=on-abort
 User=pi
 Group=pi
@@ -205,10 +187,23 @@ Group=pi
 WantedBy=graphical.target
 EOF
 
+# set permissions and execution bits on the script
+chmod +x /home/pi/kiosk/kiosk*
+chown pi:pi /home/pi/kiosk/kiosk*
+
+
+# check if URLS has 2 or more values by looking for spaces in the string.
+# If so enable a tab shifting function
+
+spaces=" |'"
+if [[ "$URLS" =~ $spaces ]]
+    sed '/ExecStart=/ a ExecStartPost=/home/pi/kiosk/kiosk-tab-shift.sh' /etc/systemd/system/pi@kiosk.service
+fi
+
+#####################################
+#       enable services files       # 
+#####################################
+
 systemctl enable pi@kiosk.service
 systemctl daemon-reload
-
-echo 'configuration done. to start enter'
-echo 'sudo systemctl start pi@kiosk.service'
-
-
+systemctl start pi@kiosk.service
